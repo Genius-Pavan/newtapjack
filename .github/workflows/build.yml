@@ -22,15 +22,13 @@ jobs:
       - name: Setup Android SDK
         uses: android-actions/setup-android@v3
 
-      - name: Install Gradle
+      - name: Generate Gradle Wrapper
         run: |
-          wget -q https://services.gradle.org/distributions/gradle-8.0-bin.zip
-          unzip -q gradle-8.0-bin.zip -d /opt/gradle
-          export PATH=/opt/gradle/gradle-8.0/bin:$PATH
-          echo "/opt/gradle/gradle-8.0/bin" >> $GITHUB_PATH
+          gradle wrapper --gradle-version 8.0 --distribution-type bin
+          chmod +x gradlew
 
       - name: Build Debug APK
-        run: gradle assembleDebug
+        run: ./gradlew assembleDebug --no-daemon
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
